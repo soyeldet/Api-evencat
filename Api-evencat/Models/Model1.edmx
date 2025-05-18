@@ -1,0 +1,576 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="evencatModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Amics">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="usuari1_id" Type="int" Nullable="false" />
+          <Property Name="usuari2_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Butaques">
+          <Key>
+            <PropertyRef Name="butaca_id" />
+          </Key>
+          <Property Name="butaca_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fila" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="numero" Type="int" Nullable="false" />
+          <Property Name="espai_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Esdeveniments">
+          <Key>
+            <PropertyRef Name="event_id" />
+          </Key>
+          <Property Name="event_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nom" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="descripcio" Type="text" Nullable="false" />
+          <Property Name="data_hora" Type="datetime" Nullable="false" />
+          <Property Name="text_promocional" Type="text" />
+          <Property Name="imatge_promocional_url" Type="varchar" MaxLength="512" />
+          <Property Name="estat" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="espai_id" Type="int" Nullable="false" />
+          <Property Name="organitzador_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Espais">
+          <Key>
+            <PropertyRef Name="espai_id" />
+          </Key>
+          <Property Name="espai_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nom" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="ubicacio" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="metres_quadrats" Type="int" Nullable="false" />
+          <Property Name="cadires_fixes" Type="int" />
+        </EntityType>
+        <EntityType Name="Reserves">
+          <Key>
+            <PropertyRef Name="reserva_id" />
+          </Key>
+          <Property Name="reserva_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="data_reserva" Type="datetime" />
+          <Property Name="usuari_id" Type="int" Nullable="false" />
+          <Property Name="event_id" Type="int" Nullable="false" />
+          <Property Name="butaca_id" Type="int" />
+        </EntityType>
+        <EntityType Name="Usuaris">
+          <Key>
+            <PropertyRef Name="usuari_id" />
+          </Key>
+          <Property Name="usuari_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="password_hash" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="rol" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="data_registre" Type="datetime" />
+          <Property Name="created_by" Type="int" />
+          <Property Name="nom" Type="nvarchar" MaxLength="100" />
+          <Property Name="descripcio" Type="nvarchar" MaxLength="255" />
+          <Property Name="url_imagen" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <Association Name="FK__Amics__usuari1_i__160F4887">
+          <End Role="Usuaris" Type="Self.Usuaris" Multiplicity="1" />
+          <End Role="Amics" Type="Self.Amics" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuaris">
+              <PropertyRef Name="usuari_id" />
+            </Principal>
+            <Dependent Role="Amics">
+              <PropertyRef Name="usuari1_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Amics__usuari2_i__17036CC0">
+          <End Role="Usuaris" Type="Self.Usuaris" Multiplicity="1" />
+          <End Role="Amics" Type="Self.Amics" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuaris">
+              <PropertyRef Name="usuari_id" />
+            </Principal>
+            <Dependent Role="Amics">
+              <PropertyRef Name="usuari2_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Butaques__espai___5FB337D6">
+          <End Role="Espais" Type="Self.Espais" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Butaques" Type="Self.Butaques" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Espais">
+              <PropertyRef Name="espai_id" />
+            </Principal>
+            <Dependent Role="Butaques">
+              <PropertyRef Name="espai_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Esdevenim__espai__628FA481">
+          <End Role="Espais" Type="Self.Espais" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Esdeveniments" Type="Self.Esdeveniments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Espais">
+              <PropertyRef Name="espai_id" />
+            </Principal>
+            <Dependent Role="Esdeveniments">
+              <PropertyRef Name="espai_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Esdevenim__organ__6383C8BA">
+          <End Role="Usuaris" Type="Self.Usuaris" Multiplicity="1" />
+          <End Role="Esdeveniments" Type="Self.Esdeveniments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuaris">
+              <PropertyRef Name="usuari_id" />
+            </Principal>
+            <Dependent Role="Esdeveniments">
+              <PropertyRef Name="organitzador_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reserves__butaca__693CA210">
+          <End Role="Butaques" Type="Self.Butaques" Multiplicity="0..1" />
+          <End Role="Reserves" Type="Self.Reserves" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Butaques">
+              <PropertyRef Name="butaca_id" />
+            </Principal>
+            <Dependent Role="Reserves">
+              <PropertyRef Name="butaca_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reserves__event___6A30C649">
+          <End Role="Esdeveniments" Type="Self.Esdeveniments" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Reserves" Type="Self.Reserves" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Esdeveniments">
+              <PropertyRef Name="event_id" />
+            </Principal>
+            <Dependent Role="Reserves">
+              <PropertyRef Name="event_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reserves__usuari__6B24EA82">
+          <End Role="Usuaris" Type="Self.Usuaris" Multiplicity="1" />
+          <End Role="Reserves" Type="Self.Reserves" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuaris">
+              <PropertyRef Name="usuari_id" />
+            </Principal>
+            <Dependent Role="Reserves">
+              <PropertyRef Name="usuari_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Usuaris__created__76969D2E">
+          <End Role="Usuaris" Type="Self.Usuaris" Multiplicity="0..1" />
+          <End Role="Usuaris1" Type="Self.Usuaris" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuaris">
+              <PropertyRef Name="usuari_id" />
+            </Principal>
+            <Dependent Role="Usuaris1">
+              <PropertyRef Name="created_by" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="evencatModelStoreContainer">
+          <EntitySet Name="Amics" EntityType="Self.Amics" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Butaques" EntityType="Self.Butaques" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Esdeveniments" EntityType="Self.Esdeveniments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Espais" EntityType="Self.Espais" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Reserves" EntityType="Self.Reserves" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuaris" EntityType="Self.Usuaris" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Amics__usuari1_i__160F4887" Association="Self.FK__Amics__usuari1_i__160F4887">
+            <End Role="Usuaris" EntitySet="Usuaris" />
+            <End Role="Amics" EntitySet="Amics" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Amics__usuari2_i__17036CC0" Association="Self.FK__Amics__usuari2_i__17036CC0">
+            <End Role="Usuaris" EntitySet="Usuaris" />
+            <End Role="Amics" EntitySet="Amics" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Butaques__espai___5FB337D6" Association="Self.FK__Butaques__espai___5FB337D6">
+            <End Role="Espais" EntitySet="Espais" />
+            <End Role="Butaques" EntitySet="Butaques" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Esdevenim__espai__628FA481" Association="Self.FK__Esdevenim__espai__628FA481">
+            <End Role="Espais" EntitySet="Espais" />
+            <End Role="Esdeveniments" EntitySet="Esdeveniments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Esdevenim__organ__6383C8BA" Association="Self.FK__Esdevenim__organ__6383C8BA">
+            <End Role="Usuaris" EntitySet="Usuaris" />
+            <End Role="Esdeveniments" EntitySet="Esdeveniments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reserves__butaca__693CA210" Association="Self.FK__Reserves__butaca__693CA210">
+            <End Role="Butaques" EntitySet="Butaques" />
+            <End Role="Reserves" EntitySet="Reserves" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reserves__event___6A30C649" Association="Self.FK__Reserves__event___6A30C649">
+            <End Role="Esdeveniments" EntitySet="Esdeveniments" />
+            <End Role="Reserves" EntitySet="Reserves" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reserves__usuari__6B24EA82" Association="Self.FK__Reserves__usuari__6B24EA82">
+            <End Role="Usuaris" EntitySet="Usuaris" />
+            <End Role="Reserves" EntitySet="Reserves" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Usuaris__created__76969D2E" Association="Self.FK__Usuaris__created__76969D2E">
+            <End Role="Usuaris" EntitySet="Usuaris" />
+            <End Role="Usuaris1" EntitySet="Usuaris" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="evencatModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="evencatEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Amics" EntityType="evencatModel.Amics" />
+          <EntitySet Name="Butaques" EntityType="evencatModel.Butaques" />
+          <EntitySet Name="Esdeveniments" EntityType="evencatModel.Esdeveniments" />
+          <EntitySet Name="Espais" EntityType="evencatModel.Espais" />
+          <EntitySet Name="Reserves" EntityType="evencatModel.Reserves" />
+          <EntitySet Name="Usuaris" EntityType="evencatModel.Usuaris" />
+          <AssociationSet Name="FK__Amics__usuari1_i__160F4887" Association="evencatModel.FK__Amics__usuari1_i__160F4887">
+            <End Role="Usuaris" EntitySet="Usuaris" />
+            <End Role="Amics" EntitySet="Amics" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Amics__usuari2_i__17036CC0" Association="evencatModel.FK__Amics__usuari2_i__17036CC0">
+            <End Role="Usuaris" EntitySet="Usuaris" />
+            <End Role="Amics" EntitySet="Amics" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Butaques__espai___5FB337D6" Association="evencatModel.FK__Butaques__espai___5FB337D6">
+            <End Role="Espais" EntitySet="Espais" />
+            <End Role="Butaques" EntitySet="Butaques" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reserves__butaca__693CA210" Association="evencatModel.FK__Reserves__butaca__693CA210">
+            <End Role="Butaques" EntitySet="Butaques" />
+            <End Role="Reserves" EntitySet="Reserves" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Esdevenim__espai__628FA481" Association="evencatModel.FK__Esdevenim__espai__628FA481">
+            <End Role="Espais" EntitySet="Espais" />
+            <End Role="Esdeveniments" EntitySet="Esdeveniments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Esdevenim__organ__6383C8BA" Association="evencatModel.FK__Esdevenim__organ__6383C8BA">
+            <End Role="Usuaris" EntitySet="Usuaris" />
+            <End Role="Esdeveniments" EntitySet="Esdeveniments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reserves__event___6A30C649" Association="evencatModel.FK__Reserves__event___6A30C649">
+            <End Role="Esdeveniments" EntitySet="Esdeveniments" />
+            <End Role="Reserves" EntitySet="Reserves" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reserves__usuari__6B24EA82" Association="evencatModel.FK__Reserves__usuari__6B24EA82">
+            <End Role="Usuaris" EntitySet="Usuaris" />
+            <End Role="Reserves" EntitySet="Reserves" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Usuaris__created__76969D2E" Association="evencatModel.FK__Usuaris__created__76969D2E">
+            <End Role="Usuaris" EntitySet="Usuaris" />
+            <End Role="Usuaris1" EntitySet="Usuaris" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Amics">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="usuari1_id" Type="Int32" Nullable="false" />
+          <Property Name="usuari2_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Usuaris" Relationship="evencatModel.FK__Amics__usuari1_i__160F4887" FromRole="Amics" ToRole="Usuaris" />
+          <NavigationProperty Name="Usuaris1" Relationship="evencatModel.FK__Amics__usuari2_i__17036CC0" FromRole="Amics" ToRole="Usuaris" />
+        </EntityType>
+        <EntityType Name="Butaques">
+          <Key>
+            <PropertyRef Name="butaca_id" />
+          </Key>
+          <Property Name="butaca_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fila" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="numero" Type="Int32" Nullable="false" />
+          <Property Name="espai_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Espais" Relationship="evencatModel.FK__Butaques__espai___5FB337D6" FromRole="Butaques" ToRole="Espais" />
+          <NavigationProperty Name="Reserves" Relationship="evencatModel.FK__Reserves__butaca__693CA210" FromRole="Butaques" ToRole="Reserves" />
+        </EntityType>
+        <EntityType Name="Esdeveniments">
+          <Key>
+            <PropertyRef Name="event_id" />
+          </Key>
+          <Property Name="event_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nom" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="descripcio" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="data_hora" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="text_promocional" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="imatge_promocional_url" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="estat" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="espai_id" Type="Int32" Nullable="false" />
+          <Property Name="organitzador_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Espais" Relationship="evencatModel.FK__Esdevenim__espai__628FA481" FromRole="Esdeveniments" ToRole="Espais" />
+          <NavigationProperty Name="Usuaris" Relationship="evencatModel.FK__Esdevenim__organ__6383C8BA" FromRole="Esdeveniments" ToRole="Usuaris" />
+          <NavigationProperty Name="Reserves" Relationship="evencatModel.FK__Reserves__event___6A30C649" FromRole="Esdeveniments" ToRole="Reserves" />
+        </EntityType>
+        <EntityType Name="Espais">
+          <Key>
+            <PropertyRef Name="espai_id" />
+          </Key>
+          <Property Name="espai_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nom" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ubicacio" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="metres_quadrats" Type="Int32" Nullable="false" />
+          <Property Name="cadires_fixes" Type="Int32" />
+          <NavigationProperty Name="Butaques" Relationship="evencatModel.FK__Butaques__espai___5FB337D6" FromRole="Espais" ToRole="Butaques" />
+          <NavigationProperty Name="Esdeveniments" Relationship="evencatModel.FK__Esdevenim__espai__628FA481" FromRole="Espais" ToRole="Esdeveniments" />
+        </EntityType>
+        <EntityType Name="Reserves">
+          <Key>
+            <PropertyRef Name="reserva_id" />
+          </Key>
+          <Property Name="reserva_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="data_reserva" Type="DateTime" Precision="3" />
+          <Property Name="usuari_id" Type="Int32" Nullable="false" />
+          <Property Name="event_id" Type="Int32" Nullable="false" />
+          <Property Name="butaca_id" Type="Int32" />
+          <NavigationProperty Name="Butaques" Relationship="evencatModel.FK__Reserves__butaca__693CA210" FromRole="Reserves" ToRole="Butaques" />
+          <NavigationProperty Name="Esdeveniments" Relationship="evencatModel.FK__Reserves__event___6A30C649" FromRole="Reserves" ToRole="Esdeveniments" />
+          <NavigationProperty Name="Usuaris" Relationship="evencatModel.FK__Reserves__usuari__6B24EA82" FromRole="Reserves" ToRole="Usuaris" />
+        </EntityType>
+        <EntityType Name="Usuaris">
+          <Key>
+            <PropertyRef Name="usuari_id" />
+          </Key>
+          <Property Name="usuari_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="password_hash" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="rol" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="data_registre" Type="DateTime" Precision="3" />
+          <Property Name="created_by" Type="Int32" />
+          <Property Name="nom" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="descripcio" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Amics" Relationship="evencatModel.FK__Amics__usuari1_i__160F4887" FromRole="Usuaris" ToRole="Amics" />
+          <NavigationProperty Name="Amics1" Relationship="evencatModel.FK__Amics__usuari2_i__17036CC0" FromRole="Usuaris" ToRole="Amics" />
+          <NavigationProperty Name="Esdeveniments" Relationship="evencatModel.FK__Esdevenim__organ__6383C8BA" FromRole="Usuaris" ToRole="Esdeveniments" />
+          <NavigationProperty Name="Reserves" Relationship="evencatModel.FK__Reserves__usuari__6B24EA82" FromRole="Usuaris" ToRole="Reserves" />
+          <NavigationProperty Name="Usuaris1" Relationship="evencatModel.FK__Usuaris__created__76969D2E" FromRole="Usuaris" ToRole="Usuaris1" />
+          <NavigationProperty Name="Usuaris2" Relationship="evencatModel.FK__Usuaris__created__76969D2E" FromRole="Usuaris1" ToRole="Usuaris" />
+          <Property Name="url_imagen" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK__Amics__usuari1_i__160F4887">
+          <End Type="evencatModel.Usuaris" Role="Usuaris" Multiplicity="1" />
+          <End Type="evencatModel.Amics" Role="Amics" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuaris">
+              <PropertyRef Name="usuari_id" />
+            </Principal>
+            <Dependent Role="Amics">
+              <PropertyRef Name="usuari1_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Amics__usuari2_i__17036CC0">
+          <End Type="evencatModel.Usuaris" Role="Usuaris" Multiplicity="1" />
+          <End Type="evencatModel.Amics" Role="Amics" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuaris">
+              <PropertyRef Name="usuari_id" />
+            </Principal>
+            <Dependent Role="Amics">
+              <PropertyRef Name="usuari2_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Butaques__espai___5FB337D6">
+          <End Type="evencatModel.Espais" Role="Espais" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="evencatModel.Butaques" Role="Butaques" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Espais">
+              <PropertyRef Name="espai_id" />
+            </Principal>
+            <Dependent Role="Butaques">
+              <PropertyRef Name="espai_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reserves__butaca__693CA210">
+          <End Type="evencatModel.Butaques" Role="Butaques" Multiplicity="0..1" />
+          <End Type="evencatModel.Reserves" Role="Reserves" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Butaques">
+              <PropertyRef Name="butaca_id" />
+            </Principal>
+            <Dependent Role="Reserves">
+              <PropertyRef Name="butaca_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Esdevenim__espai__628FA481">
+          <End Type="evencatModel.Espais" Role="Espais" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="evencatModel.Esdeveniments" Role="Esdeveniments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Espais">
+              <PropertyRef Name="espai_id" />
+            </Principal>
+            <Dependent Role="Esdeveniments">
+              <PropertyRef Name="espai_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Esdevenim__organ__6383C8BA">
+          <End Type="evencatModel.Usuaris" Role="Usuaris" Multiplicity="1" />
+          <End Type="evencatModel.Esdeveniments" Role="Esdeveniments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuaris">
+              <PropertyRef Name="usuari_id" />
+            </Principal>
+            <Dependent Role="Esdeveniments">
+              <PropertyRef Name="organitzador_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reserves__event___6A30C649">
+          <End Type="evencatModel.Esdeveniments" Role="Esdeveniments" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="evencatModel.Reserves" Role="Reserves" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Esdeveniments">
+              <PropertyRef Name="event_id" />
+            </Principal>
+            <Dependent Role="Reserves">
+              <PropertyRef Name="event_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reserves__usuari__6B24EA82">
+          <End Type="evencatModel.Usuaris" Role="Usuaris" Multiplicity="1" />
+          <End Type="evencatModel.Reserves" Role="Reserves" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuaris">
+              <PropertyRef Name="usuari_id" />
+            </Principal>
+            <Dependent Role="Reserves">
+              <PropertyRef Name="usuari_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Usuaris__created__76969D2E">
+          <End Type="evencatModel.Usuaris" Role="Usuaris" Multiplicity="0..1" />
+          <End Type="evencatModel.Usuaris" Role="Usuaris1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuaris">
+              <PropertyRef Name="usuari_id" />
+            </Principal>
+            <Dependent Role="Usuaris1">
+              <PropertyRef Name="created_by" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="evencatModelStoreContainer" CdmEntityContainer="evencatEntities1">
+          <EntitySetMapping Name="Amics">
+            <EntityTypeMapping TypeName="evencatModel.Amics">
+              <MappingFragment StoreEntitySet="Amics">
+                <ScalarProperty Name="usuari2_id" ColumnName="usuari2_id" />
+                <ScalarProperty Name="usuari1_id" ColumnName="usuari1_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Butaques">
+            <EntityTypeMapping TypeName="evencatModel.Butaques">
+              <MappingFragment StoreEntitySet="Butaques">
+                <ScalarProperty Name="espai_id" ColumnName="espai_id" />
+                <ScalarProperty Name="numero" ColumnName="numero" />
+                <ScalarProperty Name="fila" ColumnName="fila" />
+                <ScalarProperty Name="butaca_id" ColumnName="butaca_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Esdeveniments">
+            <EntityTypeMapping TypeName="evencatModel.Esdeveniments">
+              <MappingFragment StoreEntitySet="Esdeveniments">
+                <ScalarProperty Name="organitzador_id" ColumnName="organitzador_id" />
+                <ScalarProperty Name="espai_id" ColumnName="espai_id" />
+                <ScalarProperty Name="estat" ColumnName="estat" />
+                <ScalarProperty Name="imatge_promocional_url" ColumnName="imatge_promocional_url" />
+                <ScalarProperty Name="text_promocional" ColumnName="text_promocional" />
+                <ScalarProperty Name="data_hora" ColumnName="data_hora" />
+                <ScalarProperty Name="descripcio" ColumnName="descripcio" />
+                <ScalarProperty Name="nom" ColumnName="nom" />
+                <ScalarProperty Name="event_id" ColumnName="event_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Espais">
+            <EntityTypeMapping TypeName="evencatModel.Espais">
+              <MappingFragment StoreEntitySet="Espais">
+                <ScalarProperty Name="cadires_fixes" ColumnName="cadires_fixes" />
+                <ScalarProperty Name="metres_quadrats" ColumnName="metres_quadrats" />
+                <ScalarProperty Name="ubicacio" ColumnName="ubicacio" />
+                <ScalarProperty Name="nom" ColumnName="nom" />
+                <ScalarProperty Name="espai_id" ColumnName="espai_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reserves">
+            <EntityTypeMapping TypeName="evencatModel.Reserves">
+              <MappingFragment StoreEntitySet="Reserves">
+                <ScalarProperty Name="butaca_id" ColumnName="butaca_id" />
+                <ScalarProperty Name="event_id" ColumnName="event_id" />
+                <ScalarProperty Name="usuari_id" ColumnName="usuari_id" />
+                <ScalarProperty Name="data_reserva" ColumnName="data_reserva" />
+                <ScalarProperty Name="reserva_id" ColumnName="reserva_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuaris">
+            <EntityTypeMapping TypeName="evencatModel.Usuaris">
+              <MappingFragment StoreEntitySet="Usuaris">
+                <ScalarProperty Name="url_imagen" ColumnName="url_imagen" />
+                <ScalarProperty Name="descripcio" ColumnName="descripcio" />
+                <ScalarProperty Name="nom" ColumnName="nom" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="data_registre" ColumnName="data_registre" />
+                <ScalarProperty Name="rol" ColumnName="rol" />
+                <ScalarProperty Name="password_hash" ColumnName="password_hash" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="usuari_id" ColumnName="usuari_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
